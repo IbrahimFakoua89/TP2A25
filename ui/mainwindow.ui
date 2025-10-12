@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1002</width>
+    <height>612</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ---------- GLOBAL BACKGROUND ---------- */
+QWidget {
+    background-color: #1e1e1e; /* main dark background */
+    color: #f0f0f0;
+    font-family: &quot;Segoe UI&quot;, &quot;Roboto&quot;, sans-serif;
+    font-size: 10pt;
+}
+
+/* ---------- QGROUPBOX ---------- */
+QGroupBox {
+    border: 1.5px solid #3a3a3a;
+    border-radius: 8px;
+    margin-top: 14px;
+    background-color: transparent; /* ✅ fix rectangle background */
+    color: #f0f0f0;
+    padding-top: 10px;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    padding: 0 6px;
+    background-color: #1e1e1e; /* same as main background to cut border cleanly */
+    color: #3daee9;
+    font-weight: bold;
+}
+
+/* ---------- QPUSHBUTTON ---------- */
+QPushButton {
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: #f0f0f0;
+}
+QPushButton:hover {
+    background-color: #3e3e3e;
+    border: 1px solid #3daee9;
+}
+QPushButton:pressed {
+    background-color: #2b2b2b;
+}
+
+/* ---------- QLINEEDIT ---------- */
+QLineEdit {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 5px 8px;
+    color: #f0f0f0;
+}
+QLineEdit:focus {
+    border: 1px solid #3daee9;
+}
+
+/* ---------- QCOMBOBOX ---------- */
+QComboBox {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 5px 8px;
+    color: #f0f0f0;
+}
+QComboBox:hover {
+    border: 1px solid #3daee9;
+}
+QComboBox::drop-down {
+    border: none;
+    width: 24px;
+}
+QComboBox QAbstractItemView {
+    background-color: #2a2a2a;
+    selection-background-color: #3daee9;
+    color: #f0f0f0;
+}
+
+/* ---------- QRADIOBUTTON ---------- */
+QRadioButton {
+    background: transparent; /* ✅ remove patchy boxes */
+    spacing: 6px;
+}
+QRadioButton::indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    border: 2px solid #888;
+    background: transparent;
+}
+QRadioButton::indicator:checked {
+    background-color: #3daee9;
+    border: 2px solid #3daee9;
+}
+QRadioButton::indicator:hover {
+    border: 2px solid #3daee9;
+}
+
+/* ---------- QSLIDER ---------- */
+QSlider {
+    background: transparent;
+}
+QSlider::groove:horizontal {
+    height: 6px;
+    background: #3a3a3a;
+    border-radius: 3px;
+}
+QSlider::handle:horizontal {
+    background: #3daee9;
+    border: none;
+    width: 14px;
+    height: 14px;
+    margin: -4px 0;
+    border-radius: 7px;
+}
+QSlider::handle:horizontal:hover {
+    background: #5dc8ff;
+}
+
+/* ---------- QLABEL ---------- */
+QLabel {
+    background: transparent; /* ✅ ensures they blend with dark background */
+    color: #f0f0f0;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QVBoxLayout" name="main_verticalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="function_and_born_verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="function_horizontalLayout" stretch="0,2">
+          <item>
+           <widget class="QLabel" name="function_label">
+            <property name="text">
+             <string>Fonction</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="bornes_horizontalLayout">
+          <item>
+           <widget class="QLabel" name="borne_inf_label">
+            <property name="text">
+             <string>Borne Inf</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="borne_inf_lineEdit">
+            <property name="styleSheet">
+             <string notr="true">QLineEdit {
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #2b2b2b;
+    color: #f0f0f0; 
+}
+
+QLineEdit:focus {
+    border: 2px solid #3daee9; 
+    background-color: #333;
+}
+</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="borne_sup_label">
+            <property name="text">
+             <string>Borne Sup</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="borne_sup_lineEdit">
+            <property name="styleSheet">
+             <string notr="true">QLineEdit {
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #2b2b2b;
+    color: #f0f0f0; 
+}
+
+QLineEdit:focus {
+    border: 2px solid #3daee9; 
+    background-color: #333;
+}
+</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string>Intégration</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="options_horizontalLayout" stretch="1,0,0,1,1,1,1,0">
+         <item>
+          <widget class="QLabel" name="nombre_label">
+           <property name="text">
+            <string>Nombre</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="slider_verticalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel {
+    color: #3daee9;
+    font-family: &quot;Consolas&quot;;
+    font-size: 9px;
+    qproperty-alignment: 'AlignHCenter';
+}
+</string>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="midLineWidth">
+              <number>0</number>
+             </property>
+             <property name="text">
+              <string>|  |  | | || ||| |||| |||||</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="horizontalSlider">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="gauche_radioButton">
+           <property name="text">
+            <string>Somme à gauche</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="droite_radioButton">
+           <property name="text">
+            <string>Somme à droite</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="calculer_pushButton">
+           <property name="text">
+            <string>Calculer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="exporter_pushButton">
+           <property name="text">
+            <string>Exporter</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="outputs_horizontalLayout" stretch="1,5,2,1,5">
+         <item>
+          <widget class="QLabel" name="somme_label">
+           <property name="text">
+            <string>Somme</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="somme_lineEdit">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit {
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #2b2b2b;
+    color: #f0f0f0;
+}
+
+QLineEdit:focus {
+    border: 2px solid #3daee9; 
+    background-color: #333;
+}
+</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="integral_label">
+           <property name="text">
+            <string>Intégrale</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="integral_lineEdit">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit {
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #2b2b2b;
+    color: #f0f0f0; 
+}
+
+QLineEdit:focus {
+    border: 2px solid #3daee9; 
+    background-color: #333;
+}
+</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1002</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fonctions_menu">
+    <property name="title">
+     <string>Fonctions</string>
+    </property>
+    <addaction name="actionListe_fonctions"/>
+   </widget>
+   <widget class="QMenu" name="file_menu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExptorter"/>
+    <addaction name="actionQuitter"/>
+   </widget>
+   <addaction name="file_menu"/>
+   <addaction name="fonctions_menu"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QListView" name="listView"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionListe_fonctions">
+   <property name="text">
+    <string>Liste fonctions</string>
+   </property>
+  </action>
+  <action name="actionExptorter">
+   <property name="text">
+    <string>Exptorter</string>
+   </property>
+  </action>
+  <action name="actionQuitter">
+   <property name="text">
+    <string>Quitter</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
