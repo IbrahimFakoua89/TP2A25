@@ -493,14 +493,71 @@ QLineEdit:focus {
    <addaction name="file_menu"/>
    <addaction name="fonctions_menu"/>
   </widget>
-  <widget class="QDockWidget" name="dockWidget_2">
+  <widget class="QDockWidget" name="dockWidget">
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QListView" name="listView"/>
+      <layout class="QVBoxLayout" name="dock_verticalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="dock_label">
+             <property name="text">
+              <string>Fonction</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="dock_lineEdit"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,2,0,0">
+           <item>
+            <widget class="QPushButton" name="enregistrer_pushButton">
+             <property name="text">
+              <string>Enregistrer</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="ajouter_pushButton">
+             <property name="text">
+              <string>Ajouter</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="supprimer_pushButton">
+             <property name="text">
+              <string>Supprimer</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
