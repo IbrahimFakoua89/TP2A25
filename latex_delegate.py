@@ -18,13 +18,14 @@ class LatexDelegate(QStyledItemDelegate):
 
     def render_latex(self, formula: str, dpi=100) -> QPixmap:
         fig = plt.figure(figsize=(0.01, 0.01))
-        t = fig.text(0, 0, f"${formula}$", fontsize=14, color="white")
+        t = fig.text(0.5, 0.5, f"${formula}$", fontsize=14, color="white",ha="center", va="center")
         canvas = FigureCanvasAgg(fig)
         canvas.draw()
         bbox = t.get_window_extent(renderer=canvas.get_renderer())
         width, height = bbox.size / dpi
-        fig.set_size_inches(width, height)
-        t.set_position((-bbox.x0 / dpi, -bbox.y0 / dpi))
+
+        fig.set_size_inches(width, height + 0.4)
+        t.set_position((0.5, 0.5))
         buf = io.BytesIO()
         fig.savefig(buf, format="png", dpi=dpi, transparent=True)
 
@@ -34,11 +35,14 @@ class LatexDelegate(QStyledItemDelegate):
         return pixmap
 
     def paint(self, painter, option, index):
+
         formula = index.data(Qt.ItemDataRole.DisplayRole)
         if not formula:
             return
         if option.state & QStyle.StateFlag.State_Selected:
-            painter.fillRect(option.rect, QColor(50, 100, 200, 100))
+
+            painter.setPen(QColor("white"))
+            painter.drawRect(option.rect.adjusted(0, 0, -1, -1))  # border
         # Use cache
         pixmap = self.cache.get(formula)
         if pixmap is None:
@@ -51,10 +55,16 @@ class LatexDelegate(QStyledItemDelegate):
         painter.drawPixmap(x, y, pixmap)
 
     def sizeHint(self, option, index):
+
         formula = index.data(Qt.ItemDataRole.DisplayRole)
+
         pixmap = self.cache.get(formula)
+
         if pixmap:
             return QSize(pixmap.width(), pixmap.height())
-        return QSize(100, 30)
+        else:
+            pixmap = self.render_latex(formula)
+            self.cache[formula] = pixmap
+            return QSize(pixmap.width(), pixmap.height())
 
 

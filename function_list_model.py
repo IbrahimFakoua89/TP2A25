@@ -6,13 +6,39 @@ from sympy.parsing.latex import parse_latex
 from sympy import symbols
 
 
+def is_only_x_variable(expr: str) -> bool:
+    X = symbols('x')
+
+
+    cleaned = re.sub(r'\\[A-Za-z]+', '', expr)
+
+
+    letters = re.findall(r'[A-Za-z]', cleaned)
+
+
+    for ch in letters:
+        if ch.lower() != 'x' :
+
+            return False
+
+
+    try:
+        parsed = parse_latex(expr)
+    except Exception:
+        return False
+
+
+    if parsed.free_symbols - {X}:
+        return False
+
+    return True
 
 class FunctionListModel(QAbstractListModel):
     error_statusBar = pyqtSignal(str)
     def __init__(self, list_of_function=None):
         super().__init__()
 
-        self._functionsList = list_of_function or []
+        self._functionsList : list[str] = list_of_function or []
 
 
 
@@ -20,14 +46,16 @@ class FunctionListModel(QAbstractListModel):
         return len(self._functionsList)
 
     def data(self, index: QModelIndex, role: int = Qt.ItemDataRole.DisplayRole):
-        if role == Qt.ItemDataRole.DisplayRole:
+
+        if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole):
             return self._functionsList[index.row()]
+        print(role)
         return None
 
     def add_function(self, function: str):
         func = sp.sympify(function)
         latex_func = sp.latex(func)
-        print(latex_func)
+
         if not self.function_verification(latex_func):
             return
         if not is_only_x_variable(latex_func): return

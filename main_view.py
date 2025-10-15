@@ -9,6 +9,7 @@ from canvas_view import MplCanvas
 from function_list_model import FunctionListModel
 from function_model import Model
 from function_list_view import FunctionView
+from latex_delegate import LatexDelegate
 
 
 class MainView(QMainWindow):
@@ -77,9 +78,14 @@ class MainView(QMainWindow):
         self.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.model, "borne_sup", text))
 
     def connections_list_model(self):
+        self.comboBox: QComboBox
         self.list_model = FunctionListModel()
+        delegate = LatexDelegate()
+        function_view = FunctionView(self.list_model, self, delegate)
+        self.comboBox.setModel(self.list_model)
+        self.comboBox.setItemDelegate(delegate)
 
-        function_view = FunctionView(self.list_model, self)
+
 
 
 

@@ -6,13 +6,13 @@ from latex_delegate import LatexDelegate
 
 
 class FunctionView(QListView):
-    def __init__(self,model, parent):
+    def __init__(self,model, parent, delegate):
         super().__init__()
         self.model = model
         self.setModel(model)
         self.parent = parent
         self.setup()
-        self.setItemDelegate(LatexDelegate())
+        self.setItemDelegate(delegate)
 
     def setup(self):
         self.parent.dock_verticalLayout.insertWidget(0,self)
@@ -20,6 +20,7 @@ class FunctionView(QListView):
         self.parent.supprimer_pushButton.clicked.connect(lambda: self.parent.list_model.remove_function(self.selectedIndexes()[0].row()))
         self.parent.dock_lineEdit.returnPressed.connect(self.parent.ajouter_pushButton.click)
         self.model.error_statusBar.connect(lambda message : self.parent.statusBar().showMessage(message, 3000))
+
 
 
 

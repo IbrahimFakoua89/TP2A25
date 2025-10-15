@@ -33,7 +33,7 @@ QGroupBox {
     border: 1.5px solid #3a3a3a;
     border-radius: 8px;
     margin-top: 14px;
-    background-color: transparent; /* ✅ fix rectangle background */
+    background-color: transparent;
     color: #f0f0f0;
     padding-top: 10px;
 }
@@ -42,7 +42,7 @@ QGroupBox::title {
     subcontrol-position: top left;
     left: 10px;
     padding: 0 6px;
-    background-color: #1e1e1e; /* same as main background to cut border cleanly */
+    background-color: #1e1e1e;
     color: #3daee9;
     font-weight: bold;
 }
@@ -98,7 +98,7 @@ QComboBox QAbstractItemView {
 
 /* ---------- QRADIOBUTTON ---------- */
 QRadioButton {
-    background: transparent; /* ✅ remove patchy boxes */
+    background: transparent;
     spacing: 6px;
 }
 QRadioButton::indicator {
@@ -139,7 +139,7 @@ QSlider::handle:horizontal:hover {
 
 /* ---------- QLABEL ---------- */
 QLabel {
-    background: transparent; /* ✅ ensures they blend with dark background */
+    background: transparent;
     color: #f0f0f0;
 }
 </string>
@@ -152,6 +152,9 @@ QLabel {
        <layout class="QVBoxLayout" name="function_and_born_verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="function_horizontalLayout" stretch="0,2">
+          <property name="spacing">
+           <number>12</number>
+          </property>
           <item>
            <widget class="QLabel" name="function_label">
             <property name="text">
@@ -161,11 +164,28 @@ QLabel {
           </item>
           <item>
            <widget class="QComboBox" name="comboBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+        QComboBox {
+            background-color: #222;
+            color: white;
+            padding: 6px 30px 6px 8px; 
+            border: 1px solid #555;
+            border-radius: 6px;
+        }
+
+        QComboBox::drop-down {
+            subcontrol-origin: padding;
+            subcontrol-position: top right;
+            width: 20px; 
+            border-left: 1px solid #444;
+            background-color: #333;
+        }
+
+</string>
             </property>
             <property name="editable">
              <bool>true</bool>
@@ -474,7 +494,7 @@ QLineEdit:focus {
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="fonctions_menu">
