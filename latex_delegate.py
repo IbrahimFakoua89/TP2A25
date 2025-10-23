@@ -42,8 +42,8 @@ class LatexDelegate(QStyledItemDelegate):
         if option.state & QStyle.StateFlag.State_Selected:
 
             painter.setPen(QColor("white"))
-            painter.drawRect(option.rect.adjusted(0, 0, -1, -1))  # border
-        # Use cache
+            painter.drawRect(option.rect.adjusted(0, 0, -1, -1))
+
         pixmap = self.cache.get(formula)
         if pixmap is None:
             pixmap = self.render_latex(formula)

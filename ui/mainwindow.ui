@@ -65,14 +65,15 @@ QPushButton:pressed {
 
 /* ---------- QLINEEDIT ---------- */
 QLineEdit {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 5px 8px;
-    color: #f0f0f0;
+    border: 2px solid #444;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #222;
+    color: #f0f0f0; 
 }
 QLineEdit:focus {
-    border: 1px solid #3daee9;
+    border: 2px solid #3daee9; 
+    background-color: #222;
 }
 
 /* ---------- QCOMBOBOX ---------- */
@@ -151,7 +152,7 @@ QLabel {
       <item>
        <layout class="QVBoxLayout" name="function_and_born_verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="function_horizontalLayout" stretch="0,2">
+         <layout class="QHBoxLayout" name="function_horizontalLayout" stretch="0">
           <property name="spacing">
            <number>12</number>
           </property>
@@ -159,36 +160,6 @@ QLabel {
            <widget class="QLabel" name="function_label">
             <property name="text">
              <string>Fonction</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBox">
-            <property name="acceptDrops">
-             <bool>false</bool>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">
-        QComboBox {
-            background-color: #222;
-            color: white;
-            padding: 6px 30px 6px 8px; 
-            border: 1px solid #555;
-            border-radius: 6px;
-        }
-
-        QComboBox::drop-down {
-            subcontrol-origin: padding;
-            subcontrol-position: top right;
-            width: 20px; 
-            border-left: 1px solid #444;
-            background-color: #333;
-        }
-
-</string>
-            </property>
-            <property name="editable">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -206,19 +177,7 @@ QLabel {
           <item>
            <widget class="QLineEdit" name="borne_inf_lineEdit">
             <property name="styleSheet">
-             <string notr="true">QLineEdit {
-    border: 2px solid #444;
-    border-radius: 10px;
-    padding: 6px 10px;
-    background-color: #2b2b2b;
-    color: #f0f0f0; 
-}
-
-QLineEdit:focus {
-    border: 2px solid #3daee9; 
-    background-color: #333;
-}
-</string>
+             <string notr="true"/>
             </property>
            </widget>
           </item>
@@ -236,13 +195,13 @@ QLineEdit:focus {
     border: 2px solid #444;
     border-radius: 10px;
     padding: 6px 10px;
-    background-color: #2b2b2b;
+    background-color: #222;
     color: #f0f0f0; 
 }
 
 QLineEdit:focus {
     border: 2px solid #3daee9; 
-    background-color: #333;
+    background-color: #222;
 }
 </string>
             </property>
@@ -428,10 +387,6 @@ QLineEdit:focus {
     color: #f0f0f0;
 }
 
-QLineEdit:focus {
-    border: 2px solid #3daee9; 
-    background-color: #333;
-}
 </string>
            </property>
            <property name="readOnly">
@@ -469,11 +424,6 @@ QLineEdit:focus {
     background-color: #2b2b2b;
     color: #f0f0f0; 
 }
-
-QLineEdit:focus {
-    border: 2px solid #3daee9; 
-    background-color: #333;
-}
 </string>
            </property>
            <property name="readOnly">
@@ -494,7 +444,7 @@ QLineEdit:focus {
      <x>0</x>
      <y>0</y>
      <width>1002</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="fonctions_menu">

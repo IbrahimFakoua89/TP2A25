@@ -35,8 +35,9 @@ class MplCanvas(FigureCanvas):
     def update_plot(self):
 
         equation = self.model.function
+        print(equation)
 
-
+        print(self.model.ydata)
         self.axes.clear()
         self.axes.plot(self.model.xdata, self.model.ydata, 'r')
         self.draw()

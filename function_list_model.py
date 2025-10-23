@@ -4,10 +4,11 @@ import sympy as sp
 import re
 from sympy.parsing.latex import parse_latex
 from sympy import symbols
+from sympy.parsing.latex import parse_latex
 
-
+CALC_ROLE = Qt.ItemDataRole.UserRole + 1
 def is_only_x_variable(expr: str) -> bool:
-    X = symbols('x')
+    x = symbols('x')
 
 
     cleaned = re.sub(r'\\[A-Za-z]+', '', expr)
@@ -22,19 +23,11 @@ def is_only_x_variable(expr: str) -> bool:
             return False
 
 
-    try:
-        parsed = parse_latex(expr)
-    except Exception:
-        return False
-
-
-    if parsed.free_symbols - {X}:
-        return False
-
     return True
 
 class FunctionListModel(QAbstractListModel):
     error_statusBar = pyqtSignal(str)
+    function_added = pyqtSignal()
     def __init__(self, list_of_function=None):
         super().__init__()
 
@@ -42,37 +35,34 @@ class FunctionListModel(QAbstractListModel):
 
 
 
+
     def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
         return len(self._functionsList)
 
     def data(self, index: QModelIndex, role: int = Qt.ItemDataRole.DisplayRole):
-
-        if role in (Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole):
+        x = symbols('x')
+        if role == Qt.ItemDataRole.DisplayRole:
             return self._functionsList[index.row()]
-        print(role)
+        if role == CALC_ROLE:
+            print(self._functionsList[index.row()])
+            return sp.lambdify(x, parse_latex(self._functionsList[index.row()]), modules="numpy")
         return None
 
     def add_function(self, function: str):
+
         func = sp.sympify(function)
+
         latex_func = sp.latex(func)
 
-        if not self.function_verification(latex_func):
-            return
+        if latex_func in self._functionsList: return
         if not is_only_x_variable(latex_func): return
+
         row = len(self._functionsList)
         self.beginInsertRows(QModelIndex(), row, row)
         self._functionsList.append(latex_func)
         self.endInsertRows()
-    def function_verification(self,function) -> bool:
-        if function in self._functionsList: return False
-        # if any(ch.isalpha() and ch.lower() != 'x' for ch in function):
-        #     self.error_statusBar.emit("Erreur : seule la variable « x » est autorisée.")
-        #     return False  #Contains letters other than x
-        # else:
-        #     return True
+        self.function_added.emit()
 
-
-        return True
 
     def remove_function(self, row: int): #todo the case if no sellection is made error
         if 0 <= row < len(self._functionsList):

@@ -3,7 +3,7 @@ import sympy as sp
 import numpy as np
 
 class Model(QObject):
-    function_parameters_changed = pyqtSignal(str)
+    function_parameters_changed = pyqtSignal()
     rectangle_parameters_changed = pyqtSignal(str)
 
 
@@ -15,24 +15,23 @@ class Model(QObject):
         self._nombre_de_rectangle = None
         self._borne_sup = None
         self._borne_inf = None
-        self._equation = ""
+        self._function = ""
         self._title = ""
 
     @property
     def function(self):
-        return self._equation
+        return self._function
 
     @function.setter
-    def function(self, value):
-        if value != self._equation:
+    def function(self, func):
 
-            x = sp.symbols("x")  ##Todo make it receive any symbol
-            func = sp.lambdify(x, sp.sympify(value))
-            self._equation = value
-            self.xdata = np.linspace(-10, 10, 200)
-            self.ydata = func(self.xdata)
 
-            self.function_parameters_changed.emit()
+        self._function = func
+        self.xdata = np.linspace(self._borne_inf, self._borne_sup, 200)
+
+        self.ydata = func(self.xdata)
+
+        self.function_parameters_changed.emit()
 
     @property
     def borne_inf(self):
@@ -41,7 +40,7 @@ class Model(QObject):
     @borne_inf.setter
     def borne_inf(self, value):
         self._borne_inf = value
-        self.function_parameters_changed.emit(value)
+        self.function_parameters_changed.emit()
 
     @property
     def borne_sup(self):
@@ -50,7 +49,7 @@ class Model(QObject):
     @borne_sup.setter
     def borne_sup(self, value):
         self._borne_sup = value
-        self.function_parameters_changed.emit(value)
+        self.function_parameters_changed.emit()
 
     @property
     def nombre_de_rectangle(self):
@@ -59,7 +58,7 @@ class Model(QObject):
     @nombre_de_rectangle.setter
     def nombre_de_rectangle(self, value):
         self._nombre_de_rectangle = value
-        self.rectangle_parameters_changed.emit(value)
+        self.rectangle_parameters_changed.emit()
 
     @property
     def radioButton_state(self):
@@ -68,6 +67,6 @@ class Model(QObject):
     @radioButton_state.setter
     def radioButton_state(self, value):
         self._radioButton_state = value
-        self.rectangle_parameters_changed.emit(value)
+        self.rectangle_parameters_changed.emit()
 
 

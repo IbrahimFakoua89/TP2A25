@@ -2,28 +2,32 @@ import sys
 import traceback
 
 from PyQt6 import QtWidgets, uic
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMainWindow, QLineEdit, QCheckBox, QPushButton, QLabel, QWidget, QVBoxLayout, QComboBox, \
     QGroupBox, QSlider, QRadioButton, QMenuBar, QMenu, QHBoxLayout, QListView, QDockWidget, QMessageBox
 
 from canvas_view import MplCanvas
+from custom_comboBox import CustomComboBox
 from function_list_model import FunctionListModel
-from function_model import Model
+from graph_model import Model
 from function_list_view import FunctionView
 from latex_delegate import LatexDelegate
 
-
+CALC_ROLE = Qt.ItemDataRole.UserRole + 1
 class MainView(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.canvas = None
+        self.latex_delegate = None
+        self.custom_comboBox = None
         self.list_model = None
-        self.model = None
+        self.canvas_model = None
         uic.loadUi("ui/mainwindow.ui", self)
         self.MainWindow: QMainWindow
         self.centralwidget: QWidget
         self.main_verticalLayout : QVBoxLayout
         self.function_label: QLabel
-        self.comboBox: QComboBox
         self.borne_inf_label: QLabel
         self.borne_inf_lineEdit: QLineEdit
         self.borne_sup_label: QLabel
@@ -63,7 +67,8 @@ class MainView(QMainWindow):
 
         self.connections_model()
         self.connections_list_model()
-
+        self.setup_comboBox()
+        self.function_horizontalLayout : QHBoxLayout
 
 
 
@@ -71,21 +76,29 @@ class MainView(QMainWindow):
 
 
     def connections_model(self):
-        self.model = Model()
-        canvas = MplCanvas(self.model)
-        self.main_verticalLayout.insertWidget(1,canvas)
-        self.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.model, "borne_inf", text))
-        self.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.model, "borne_sup", text))
+        self.canvas_model = Model()
+        self.canvas = MplCanvas(self.canvas_model)
+        self.main_verticalLayout.insertWidget(1,self.canvas)
+        self.canvas_model.function_parameters_changed.connect(self.canvas.update_plot)
+        self.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_inf", text))
+        self.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_sup", text))
 
     def connections_list_model(self):
-        self.comboBox: QComboBox
+
         self.list_model = FunctionListModel()
-        delegate = LatexDelegate()
-        function_view = FunctionView(self.list_model, self, delegate)
-        self.comboBox.setModel(self.list_model)
-        self.comboBox.setItemDelegate(delegate)
+        self.latex_delegate = LatexDelegate()
+        function_view = FunctionView(self.list_model, self, self.latex_delegate)
 
 
+
+
+    def setup_comboBox(self):
+        self.custom_comboBox = CustomComboBox(self.latex_delegate)
+        self.custom_comboBox.setModel(self.list_model)
+        self.function_horizontalLayout.insertWidget(1,self.custom_comboBox)
+        self.function_horizontalLayout.setStretch(1,9)
+
+        self.custom_comboBox.currentIndexChanged.connect(lambda index: setattr(self.canvas_model, "function", self.custom_comboBox.model().index(index, self.custom_comboBox.modelColumn()).data( CALC_ROLE)))
 
 
 
