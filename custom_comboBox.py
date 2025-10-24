@@ -1,13 +1,19 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QComboBox, QStylePainter, QStyleOption, QStyleOptionComboBox, QStyle
 
 
+
+
 class CustomComboBox(QComboBox):
-    def __init__(self,  delegate,*args, **kwargs):
+    def __init__(self, delegate,model, parent, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.delegate = delegate
         self.setItemDelegate(delegate)
-        self.setStyleSheet("""
+        self.setModel(model)
+        self.parent = parent
 
+        self.setStyleSheet("""
+        
         QComboBox {
             background-color: #222;
             color: white;
@@ -26,6 +32,8 @@ class CustomComboBox(QComboBox):
 
 
 """)
+
+
 
     def paintEvent(self, e):
         painter = QStylePainter(self)  # self = QComboBox

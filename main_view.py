@@ -5,12 +5,13 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMainWindow, QLineEdit, QCheckBox, QPushButton, QLabel, QWidget, QVBoxLayout, QComboBox, \
     QGroupBox, QSlider, QRadioButton, QMenuBar, QMenu, QHBoxLayout, QListView, QDockWidget, QMessageBox
+from sympy.strategies.core import switch
 
 from canvas_view import MplCanvas
 from custom_comboBox import CustomComboBox
 from function_list_model import FunctionListModel
-from graph_model import Model
-from function_list_view import FunctionView
+from canvas_model import Model
+from function_list_view import FunctionViewList
 from latex_delegate import LatexDelegate
 
 CALC_ROLE = Qt.ItemDataRole.UserRole + 1
@@ -18,6 +19,7 @@ class MainView(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.function_list_view = None
         self.canvas = None
         self.latex_delegate = None
         self.custom_comboBox = None
@@ -26,7 +28,7 @@ class MainView(QMainWindow):
         uic.loadUi("ui/mainwindow.ui", self)
         self.MainWindow: QMainWindow
         self.centralwidget: QWidget
-        self.main_verticalLayout : QVBoxLayout
+        self.main_verticalLayout: QVBoxLayout
         self.function_label: QLabel
         self.borne_inf_label: QLabel
         self.borne_inf_lineEdit: QLineEdit
@@ -65,52 +67,59 @@ class MainView(QMainWindow):
         self.dock_label: QLabel
         self.dock_lineEdit: QLineEdit
 
-        self.connections_model()
-        self.connections_list_model()
+        self.setup_models_and_delegates()
+        self.setup_canvas()
+        self.setup_list_model()
         self.setup_comboBox()
-        self.function_horizontalLayout : QHBoxLayout
+        self.function_horizontalLayout: QHBoxLayout
+        self.setup_layout()
 
-
-
-
-
-
-    def connections_model(self):
+    def setup_models_and_delegates(self):
+        self.list_model = FunctionListModel()
+        self.latex_delegate = LatexDelegate()
         self.canvas_model = Model()
-        self.canvas = MplCanvas(self.canvas_model)
-        self.main_verticalLayout.insertWidget(1,self.canvas)
+        self.list_model = FunctionListModel()
+        self.latex_delegate = LatexDelegate()
+
+    def setup_canvas(self):
+        self.canvas = MplCanvas(self.canvas_model, self)
+
         self.canvas_model.function_parameters_changed.connect(self.canvas.update_plot)
         self.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_inf", text))
         self.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_sup", text))
+        self.canvas_model.show_warning.connect(lambda message: self.show_warning(message, "warning"))
 
-    def connections_list_model(self):
+    def setup_list_model(self):
+        self.function_list_view = FunctionViewList(self.list_model, self, self.latex_delegate)
 
-        self.list_model = FunctionListModel()
-        self.latex_delegate = LatexDelegate()
-        function_view = FunctionView(self.list_model, self, self.latex_delegate)
-
+        self.ajouter_pushButton.clicked.connect( lambda: self.list_model.add_function(self.dock_lineEdit.text()))
+        self.supprimer_pushButton.clicked.connect(lambda: self.list_model.remove_function(self.function_list_view.selectedIndexes()))
+        self.dock_lineEdit.returnPressed.connect(self.ajouter_pushButton.click)
+        self.list_model.error_statusBar.connect(lambda message : self.show_warning(message,"statusBar"))
 
 
 
     def setup_comboBox(self):
-        self.custom_comboBox = CustomComboBox(self.latex_delegate)
-        self.custom_comboBox.setModel(self.list_model)
-        self.function_horizontalLayout.insertWidget(1,self.custom_comboBox)
-        self.function_horizontalLayout.setStretch(1,9)
-
+        self.custom_comboBox = CustomComboBox(self.latex_delegate, self.list_model, self)
         self.custom_comboBox.currentIndexChanged.connect(lambda index: setattr(self.canvas_model, "function", self.custom_comboBox.model().index(index, self.custom_comboBox.modelColumn()).data( CALC_ROLE)))
 
+        self.list_model.function_added.connect(lambda : self.custom_comboBox.setCurrentIndex(self.list_model.rowCount() - 1))
 
+    def show_warning(self, message, type, title="Error"):
+        if type == "warning":
+            QMessageBox.warning(self, title, message)
+        elif type == "critical":
+            QMessageBox.critical(self, title, message)
+        elif type == "information":
+            QMessageBox.information(self, title, message)
+        elif type == "statusBar":
+            self.statusBar().showMessage(message, 3000)
 
-
-        # QMessageBox.warning(self, "Invalid Input", "Function cannot be empty.")
-        # # QMessageBox.critical(self, "Error", "Something went wrong.")
-        # QMessageBox.information(self, "Done", "Function added successfully!")
-        # self.statusBar().showMessage("Function already in list.", 3000)
-        # self.feedback_label.setText("Already exists!")
-        # self.feedback_label.setStyleSheet("color: orange;")
-
-
+    def setup_layout(self):
+        self.main_verticalLayout.insertWidget(1, self.canvas)
+        self.function_horizontalLayout.insertWidget(1, self.custom_comboBox)
+        self.function_horizontalLayout.setStretch(1, 9)
+        self.dock_verticalLayout.insertWidget(0,self.function_list_view)
 if __name__ == "__main__":
     def qt_exception_hook(exctype, value, tb):
         traceback.print_exception(exctype, value, tb)
