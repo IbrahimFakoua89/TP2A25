@@ -50,15 +50,23 @@ class FunctionListModel(QAbstractListModel):
         return None
 
     def add_function(self, function: str):
+        try:
 
-        func = parse_expr(function,
+            func = parse_expr(function,
                           transformations=standard_transformations + (implicit_multiplication_application,),
                           local_dict={"e": sp.E, "E": sp.E})
-        latex_func = sp.latex(func)
+            latex_func = sp.latex(func)
+        except:
+            self.error_statusBar.emit("la fonction est invalide")
+            return
         # print(f"func {func}" , f"funcType {type(func)}")
         # print(f"latex_func  {latex_func}")
-        if latex_func in self._functionsList: return
-        if not is_only_x_variable(latex_func): return
+        if latex_func in self._functionsList:
+            self.error_statusBar.emit("la fonction est déja dans la liste")
+            return
+        if not is_only_x_variable(latex_func):
+            self.error_statusBar.emit("la fonction est invalide")
+            return
         self._simpy_functionDict[latex_func] = func
         row = len(self._functionsList)
         self.beginInsertRows(QModelIndex(), row, row)

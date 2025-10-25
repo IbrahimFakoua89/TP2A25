@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1002</width>
-    <height>612</height>
+    <width>784</width>
+    <height>656</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -74,6 +74,10 @@ QLineEdit {
 QLineEdit:focus {
     border: 2px solid #3daee9; 
     background-color: #222;
+}
+QLineEdit[invalid=&quot;true&quot;] {
+    border: 1px solid #6B0101; /* red border */
+
 }
 
 /* ---------- QCOMBOBOX ---------- */
@@ -147,6 +151,9 @@ QLabel {
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="leftMargin">
+     <number>12</number>
+    </property>
     <item>
      <layout class="QVBoxLayout" name="main_verticalLayout">
       <item>
@@ -443,7 +450,7 @@ QLineEdit:focus {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1002</width>
+     <width>784</width>
      <height>22</height>
     </rect>
    </property>
@@ -464,6 +471,15 @@ QLineEdit:focus {
    <addaction name="fonctions_menu"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="allowedAreas">
+    <set>Qt::DockWidgetArea::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string comment="Diambiguatio" extracomment="Hi"/>
+   </property>
+   <property name="dockLocation">
+    <enum>Qt::DockWidgetArea::RightDockWidgetArea</enum>
+   </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
@@ -532,6 +548,7 @@ QLineEdit:focus {
     </layout>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionListe_fonctions">
    <property name="text">
     <string>Liste fonctions</string>
@@ -547,7 +564,25 @@ QLineEdit:focus {
     <string>Quitter</string>
    </property>
   </action>
+  <zorder>dockWidget</zorder>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionListe_fonctions</sender>
+   <signal>triggered()</signal>
+   <receiver>dockWidget</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

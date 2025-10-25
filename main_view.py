@@ -4,7 +4,7 @@ import traceback
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMainWindow, QLineEdit, QCheckBox, QPushButton, QLabel, QWidget, QVBoxLayout, QComboBox, \
-    QGroupBox, QSlider, QRadioButton, QMenuBar, QMenu, QHBoxLayout, QListView, QDockWidget, QMessageBox
+    QGroupBox, QSlider, QRadioButton, QMenuBar, QMenu, QHBoxLayout, QListView, QDockWidget, QMessageBox, QStatusBar
 from sympy.strategies.core import switch
 
 from canvas_view import MplCanvas
@@ -61,18 +61,21 @@ class MainView(QMainWindow):
         self.dockWidgetContents: QWidget
         self.dock_verticalLayout: QVBoxLayout
 
+        self.statusBar : QStatusBar
         self.enregistrer_pushButton: QPushButton
         self.ajouter_pushButton: QPushButton
         self.supprimer_pushButton: QPushButton
         self.dock_label: QLabel
         self.dock_lineEdit: QLineEdit
 
+        self.dockWidget.hide()
         self.setup_models_and_delegates()
         self.setup_canvas()
         self.setup_list_model()
         self.setup_comboBox()
         self.function_horizontalLayout: QHBoxLayout
         self.setup_layout()
+
 
     def setup_models_and_delegates(self):
         self.list_model = FunctionListModel()
@@ -87,7 +90,7 @@ class MainView(QMainWindow):
         self.canvas_model.function_parameters_changed.connect(self.canvas.update_plot)
         self.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_inf", text))
         self.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_sup", text))
-        self.canvas_model.show_warning.connect(lambda message: self.show_warning(message, "warning"))
+        self.canvas_model.show_warning.connect(lambda message, type: self.show_warning(message, type))
 
     def setup_list_model(self):
         self.function_list_view = FunctionViewList(self.list_model, self, self.latex_delegate)
@@ -96,6 +99,8 @@ class MainView(QMainWindow):
         self.supprimer_pushButton.clicked.connect(lambda: self.list_model.remove_function(self.function_list_view.selectedIndexes()))
         self.dock_lineEdit.returnPressed.connect(self.ajouter_pushButton.click)
         self.list_model.error_statusBar.connect(lambda message : self.show_warning(message,"statusBar"))
+        # self.dock_lineEdit.setProperty("invalid", False)
+        self.dock_lineEdit.style().polish(self.dock_lineEdit)
 
 
 
@@ -113,7 +118,7 @@ class MainView(QMainWindow):
         elif type == "information":
             QMessageBox.information(self, title, message)
         elif type == "statusBar":
-            self.statusBar().showMessage(message, 3000)
+            self.statusBar.showMessage(message, 3000)
 
     def setup_layout(self):
         self.main_verticalLayout.insertWidget(1, self.canvas)
