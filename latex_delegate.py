@@ -1,13 +1,19 @@
-import sys
-import traceback
 
-from PyQt6.QtWidgets import QStyledItemDelegate, QApplication, QListView, QStyle
-from PyQt6.QtGui import QPixmap, QPainter, QColor
-from PyQt6.QtCore import QSize, Qt, QStringListModel
+
+
+import io
+
+
+from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QPixmap, QColor
+from PyQt6.QtWidgets import (
+    QStyledItemDelegate,
+    QStyle,
+)
+
+
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-import io
-from PyQt6.QtGui import QPixmap
 
 
 

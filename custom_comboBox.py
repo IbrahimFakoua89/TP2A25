@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QComboBox, QStylePainter, QStyleOption, QStyleOptionComboBox, QStyle
+
+from PyQt6.QtWidgets import QComboBox, QStylePainter, QStyleOptionComboBox, QStyle
 
 
 

@@ -1,11 +1,8 @@
-import sys
-import random
-import matplotlib
-import numpy as np
 
+import matplotlib
+from matplotlib.patches import Rectangle
 matplotlib.use('QtAgg')
-import sympy as sp
-from PyQt6 import QtCore, QtWidgets
+
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -20,20 +17,28 @@ class MplCanvas(FigureCanvas):
         self.canvas_model = canvas_model
         self.axes = fig.add_subplot(111)
 
-        self.figure.set_facecolor("#262626")  # figure background
-        self.axes.set_facecolor("#262626")  # plot background
+        self.figure.set_facecolor("#262626")  #
+        self.axes.set_facecolor("#262626")
 
         for spine in self.axes.spines.values():
-            spine.set_color("white")  # hex color
-            # spine.set_linewidth(2)  # thickness in points
+            spine.set_color("white")
+            # spine.set_linewidth(2)
 
-        self.axes.tick_params(axis='x', colors='white')  # green x-axis ticks
-        self.axes.tick_params(axis='y', colors='white')  # blue y-axis ticks
+        self.axes.tick_params(axis='x', colors='white')
+        self.axes.tick_params(axis='y', colors='white')
 
-    def update_plot(self):
-        equation = self.canvas_model.function
-        self.axes.clear()
+    def update_plot(self, clear = True):
 
+        if clear :  self.axes.clear()
         self.axes.plot(self.canvas_model.xdata, self.canvas_model.ydata, 'r')
-
         self.draw()
+
+    def draw_rectangles(self, rectangles : list[list[int]]):
+        self.axes.clear()
+        for rec in rectangles:
+            rect = Rectangle((rec[0], rec[1]), rec[2], rec[3], fill= False,  color= "#ABAB2C")
+            self.axes.add_patch(rect)
+
+        self.update_plot(clear=False)
+
+

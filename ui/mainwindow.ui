@@ -236,7 +236,7 @@ QLineEdit:focus {
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QHBoxLayout" name="options_horizontalLayout" stretch="1,0,0,1,1,1,1,0">
+        <layout class="QHBoxLayout" name="options_horizontalLayout" stretch="1,0,0,1,1,1,1">
          <item>
           <widget class="QLabel" name="nombre_label">
            <property name="text">
@@ -297,6 +297,9 @@ QLineEdit:focus {
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="maximum">
+              <number>400</number>
              </property>
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>
@@ -362,13 +365,6 @@ QLineEdit:focus {
           <widget class="QPushButton" name="calculer_pushButton">
            <property name="text">
             <string>Calculer</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="exporter_pushButton">
-           <property name="text">
-            <string>Exporter</string>
            </property>
           </widget>
          </item>
@@ -464,7 +460,7 @@ QLineEdit:focus {
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionExptorter"/>
+    <addaction name="exporter_action"/>
     <addaction name="actionQuitter"/>
    </widget>
    <addaction name="file_menu"/>
@@ -554,7 +550,7 @@ QLineEdit:focus {
     <string>Liste fonctions</string>
    </property>
   </action>
-  <action name="actionExptorter">
+  <action name="exporter_action">
    <property name="text">
     <string>Exptorter</string>
    </property>
@@ -581,6 +577,22 @@ QLineEdit:focus {
     <hint type="destinationlabel">
      <x>556</x>
      <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionQuitter</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>391</x>
+     <y>327</y>
     </hint>
    </hints>
   </connection>
