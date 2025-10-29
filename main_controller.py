@@ -104,10 +104,10 @@ class MainController:
         try:
             fig.savefig(filename)
         except Exception as exc:
-            self.view.QMessageBox.critical(self, "Erreur", f"Erreur d'exportation:\n{exc}")
+            self.view.show_warning( f"Erreur d'exportation:\n{exc}","critique","Erreur")
             return
 
-        self.view.QMessageBox().information(self, "Exporté", "L'image a été enregistrée avec succès ")
+        self.view.show_warning( "L'image a été enregistrée avec succès ","information","Exporté")
 
 
 
