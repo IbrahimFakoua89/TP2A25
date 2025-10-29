@@ -9,13 +9,25 @@ from custom_comboBox import CustomComboBox
 from function_list_model import FunctionListModel
 from function_list_view import FunctionViewList
 from latex_delegate import LatexDelegate
-from main_view import MainView
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from main_view import MainView
 
 CALC_ROLE = Qt.ItemDataRole.UserRole + 1
 SYMPY_CALC_ROLE = Qt.ItemDataRole.UserRole + 2
-view : MainView
+view : "MainView"
+
+
+custom_comboBox: CustomComboBox
+function_list_view: FunctionViewList
+canvas: MplCanvas
+canvas_model: Model
+latex_delegate: LatexDelegate
+list_model: FunctionListModel
 class MainController:
-    def __init__(self, view : MainView):
+    def __init__(self, view : "MainView"):
         self.view = view
         self.canvas_model = Model()
         self.canvas = MplCanvas(self.canvas_model, self)
@@ -80,6 +92,7 @@ class MainController:
 
     def on_export_clicked(self):
         fig = self.canvas.figure
+
 
         file_filter = "PNG Files (*.png);;All Files (*)"
 
