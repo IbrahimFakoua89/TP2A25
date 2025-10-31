@@ -28,13 +28,13 @@ latex_delegate: LatexDelegate
 list_model: FunctionListModel
 class MainController:
     def __init__(self, view : "MainView"):
-        self.view = view
-        self.canvas_model = Model()
-        self.canvas = MplCanvas(self.canvas_model, self)
-        self.list_model = FunctionListModel()
-        self.latex_delegate = LatexDelegate()
-        self.function_list_view = FunctionViewList(self.list_model, self.view, self.latex_delegate)
-        self.custom_comboBox = CustomComboBox(self.latex_delegate, self.list_model, self.view)
+        self.__view = view
+        self.__canvas_model = Model()
+        self.__canvas = MplCanvas(self.__canvas_model, self)
+        self.__list_model = FunctionListModel()
+        self.__latex_delegate = LatexDelegate()
+        self.__function_list_view = FunctionViewList(self.__list_model, self.__view, self.__latex_delegate)
+        self.__custom_comboBox = CustomComboBox(self.__latex_delegate, self.__list_model, self.__view)
 
 
         self.setup_canvas()
@@ -45,58 +45,58 @@ class MainController:
 
 
     def setup_integration(self):
-        self.view.droite_radioButton.toggled.connect(
-            lambda state: setattr(self.canvas_model, "radioButton_state", "droite") if state is True else None)
-        self.view.gauche_radioButton.toggled.connect(
-            lambda state: setattr(self.canvas_model, "radioButton_state", "gauche") if state is True else None)
+        self.__view.droite_radioButton.toggled.connect(
+            lambda state: setattr(self.__canvas_model, "radioButton_state", "droite") if state is True else None)
+        self.__view.gauche_radioButton.toggled.connect(
+            lambda state: setattr(self.__canvas_model, "radioButton_state", "gauche") if state is True else None)
 
-        self.view.horizontalSlider.valueChanged.connect(
-            lambda number: setattr(self.canvas_model, "nombre_de_rectangle", number))
-        self.canvas_model.rectangle_parameters_changed.connect(
-            lambda rectangles: self.canvas.draw_rectangles(rectangles))
-        self.canvas_model.integral_result_changed.connect(lambda result: self.view.integral_lineEdit.setText(result))
-        self.canvas_model.riemann_result_changed.connect(lambda result: self.view.somme_lineEdit.setText(result))
-        self.view.calculer_pushButton.clicked.connect(self.canvas_model.on_clicked_integral)
-        self.canvas_model.clear_rectangles.connect(lambda: self.canvas.update_plot(clear=True))
+        self.__view.horizontalSlider.valueChanged.connect(
+            lambda number: setattr(self.__canvas_model, "nombre_de_rectangle", number))
+        self.__canvas_model.rectangle_parameters_changed.connect(
+            lambda rectangles: self.__canvas.draw_rectangles(rectangles))
+        self.__canvas_model.integral_result_changed.connect(lambda result: self.__view.integral_lineEdit.setText(result))
+        self.__canvas_model.riemann_result_changed.connect(lambda result: self.__view.somme_lineEdit.setText(result))
+        self.__view.calculer_pushButton.clicked.connect(self.__canvas_model.on_clicked_integral)
+        self.__canvas_model.clear_rectangles.connect(lambda: self.__canvas.update_plot(clear=True))
 
     def setup_canvas(self):
-        self.canvas_model.function_parameters_changed.connect(self.canvas.update_plot)
-        self.view.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_inf", text))
-        self.view.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.canvas_model, "borne_sup", text))
-        self.canvas_model.show_warning.connect(lambda message, type: self.view.show_warning(message, type))
-        self.view.exporter_action.triggered.connect(self.on_export_clicked)
+        self.__canvas_model.function_parameters_changed.connect(self.__canvas.update_plot)
+        self.__view.borne_inf_lineEdit.textChanged.connect(lambda text: setattr(self.__canvas_model, "borne_inf", text))
+        self.__view.borne_sup_lineEdit.textChanged.connect(lambda text: setattr(self.__canvas_model, "borne_sup", text))
+        self.__canvas_model.show_warning.connect(lambda message, type: self.__view.show_warning(message, type))
+        self.__view.exporter_action.triggered.connect(self.on_export_clicked)
 
     def setup_list_model(self):
-        self.view.ajouter_pushButton.clicked.connect(lambda: self.list_model.add_function(self.view.dock_lineEdit.text()))
-        self.view.supprimer_pushButton.clicked.connect(
-            lambda: self.list_model.remove_function(self.function_list_view.selectedIndexes()))
-        self.view.dock_lineEdit.returnPressed.connect(self.view.ajouter_pushButton.click)
-        self.list_model.error_statusBar.connect(lambda message: self.view.show_warning(message, "statusBar"))
-        self.view.dock_lineEdit.style().polish(self.view.dock_lineEdit)
+        self.__view.ajouter_pushButton.clicked.connect(lambda: self.__list_model.add_function(self.__view.dock_lineEdit.text()))
+        self.__view.supprimer_pushButton.clicked.connect(
+            lambda: self.__list_model.remove_function(self.__function_list_view.selectedIndexes()))
+        self.__view.dock_lineEdit.returnPressed.connect(self.__view.ajouter_pushButton.click)
+        self.__list_model.error_statusBar.connect(lambda message: self.__view.show_warning(message, "statusBar"))
+        self.__view.dock_lineEdit.style().polish(self.__view.dock_lineEdit)
 
     def setup_comboBox(self):
-        self.custom_comboBox.currentIndexChanged.connect(self.comboxBox_currenctIndexChanged)
+        self.__custom_comboBox.currentIndexChanged.connect(self.comboxBox_currenctIndexChanged)
 
-        self.list_model.function_added.connect(
-            lambda: self.custom_comboBox.setCurrentIndex(self.list_model.rowCount() - 1))
-        self.comboxBox_currenctIndexChanged(self.custom_comboBox.currentIndex())
+        self.__list_model.function_added.connect(
+            lambda: self.__custom_comboBox.setCurrentIndex(self.__list_model.rowCount() - 1))
+        self.comboxBox_currenctIndexChanged(self.__custom_comboBox.currentIndex())
 
     def comboxBox_currenctIndexChanged(self, index):
-        self.canvas_model.function = self.custom_comboBox.model().index(index, self.custom_comboBox.modelColumn()).data(
+        self.__canvas_model.function = self.__custom_comboBox.model().index(index, self.__custom_comboBox.modelColumn()).data(
             CALC_ROLE)
-        self.canvas_model.sympy_function = self.custom_comboBox.model().index(index,
-                                                                              self.custom_comboBox.modelColumn()).data(
+        self.__canvas_model.sympy_function = self.__custom_comboBox.model().index(index,
+                                                                                  self.__custom_comboBox.modelColumn()).data(
             SYMPY_CALC_ROLE)
     def exporter(self):
-        self.view.enregistrer_pushButton.clicked.connect(self.list_model.enregister)
+        self.__view.enregistrer_pushButton.clicked.connect(self.__list_model.enregister)
 
     def on_export_clicked(self):
-        fig = self.canvas.figure
+        fig = self.__canvas.figure
 
 
         file_filter = "PNG Files (*.png);;All Files (*)"
 
-        filename, _ = QFileDialog.getSaveFileName(self.view, "Enregistrer l'image PNG", str(Path.home() / "plot.png"),
+        filename, _ = QFileDialog.getSaveFileName(self.__view, "Enregistrer l'image PNG", str(Path.home() / "plot.png"),
                                                   file_filter)  # chatgpt
         if not filename:
             return
@@ -104,10 +104,10 @@ class MainController:
         try:
             fig.savefig(filename)
         except Exception as exc:
-            self.view.show_warning( f"Erreur d'exportation:\n{exc}","critique","Erreur")
+            self.__view.show_warning(f"Erreur d'exportation:\n{exc}", "critique", "Erreur")
             return
 
-        self.view.show_warning( "L'image a été enregistrée avec succès ","information","Exporté")
+        self.__view.show_warning("L'image a été enregistrée avec succès ", "information", "Exporté")
 
 
 
